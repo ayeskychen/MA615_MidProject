@@ -1,0 +1,202 @@
+---
+title: "buoy2012-2016"
+author: "Xiang XU"
+date: "October 10, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+##buoy data
+###import buoy data
+```{r}
+library(tidyverse)
+library(stringr)
+
+url1 <- "http://www.ndbc.noaa.gov/view_text_file.php?filename=mlrf1h"
+url2 <- ".txt.gz&dir=data/historical/stdmet/"
+
+years <- c(2012:2016)
+
+urls <- str_c(url1, years, url2, sep = "")
+
+filenames <- str_c("mr", years, sep = "")
+N <- length(urls)
+
+
+# #output path
+# outPath <- "F:/GRS MA615_DS_ R/Assignment/615midterm/buoy" #change path !!!
+# out_fileName <- sapply(filenames,function(x){ paste(x, ".csv", sep="")}) ##csv file
+# out_filePath  <- sapply(out_fileName, function(x){paste(outPath ,x,sep='/')} ) 
+# 
+# #read and output data 
+# for (i in 1:N){
+#   suppressMessages(
+#     assign(filenames[i], read_table(urls[i], col_names = TRUE))
+#   )
+#   file <- get(filenames[i])#get data from website
+#   file <- file[-1,]
+#   colnames(file)[1] <-"YYYY"
+#  
+#   write.csv(file, file=out_filePath[i]) #output data into txt file
+# } 
+
+```
+
+*I make some adjustments in excel.*
+*You can just download the adjusted csv files and import them to R.*
+
+```{r}
+Path <- "F:/GRS MA615_DS_ R/Assignment/615midterm"
+fileName <- sapply(filenames,function(x){ paste(x, ".csv", sep="")})
+filePath  <- sapply(fileName, function(x){paste(Path ,x,sep='/')} )
+
+for (i in 1:N){
+  assign(filenames[i], read_csv(filePath[i])[,-1])
+
+    
+#  file <- get(filenames[i])
+  
+#   return(get(filenames[i]) %>% 
+#   group_by(YYYY, MM, DD) %>% 
+#   summarise(
+#     daily.record.time = n(),
+#     WDIR = round(mean(WDIR),0),
+#     WSPD = round(mean(WSPD),1),
+#     GST = round(mean(GST),1),
+#     WVHT = mean(WVHT),
+#     DPD = mean(DPD),
+# 　　APD = mean(APD),
+#     MWD = round(mean(MWD ),0),
+# 　　PRES = round(mean(PRES),0),
+# 　　ATMP = round(mean(ATMP),1),
+# 　　WTMP = round(mean(WTMP),1),
+# 　　DEWP = mean(DEWP),
+# 　　VIS = mean(VIS),
+# 　　TIDE = mean(TIDE)
+#   )
+#   )
+  
+}
+```
+
+```{r}
+str(mr2012)
+```
+```{r}
+dt2012 <- mr2012 %>% 
+  group_by(YYYY, MM, DD) %>% 
+  summarise(
+    daily.record.time = n(),
+    WDIR = round(mean(WDIR),0),
+    WSPD = round(mean(WSPD),1),
+    GST = round(mean(GST),1),
+    WVHT = mean(WVHT),
+    DPD = mean(DPD),
+　　APD = mean(APD),
+    MWD = round(mean(MWD ),0),
+　　PRES = round(mean(PRES),0),
+　　ATMP = round(mean(ATMP),1),
+　　WTMP = round(mean(WTMP),1),
+　　DEWP = mean(DEWP),
+　　VIS = mean(VIS),
+　　TIDE = mean(TIDE)
+  )
+
+
+dt2013 <- mr2013 %>% 
+  group_by(YYYY, MM, DD) %>% 
+  summarise(
+    daily.record.time = n(),
+    WDIR = round(mean(WDIR),0),
+    WSPD = round(mean(WSPD),1),
+    GST = round(mean(GST),1),
+    WVHT = mean(WVHT),
+    DPD = mean(DPD),
+　　APD = mean(APD),
+    MWD = round(mean(MWD ),0),
+　　PRES = round(mean(PRES),0),
+　　ATMP = round(mean(ATMP),1),
+　　WTMP = round(mean(WTMP),1),
+　　DEWP = mean(DEWP),
+　　VIS = mean(VIS),
+　　TIDE = mean(TIDE)
+  )
+
+
+dt2014 <- mr2014 %>% 
+  group_by(YYYY, MM, DD) %>% 
+  summarise(
+    daily.record.time = n(),
+    WDIR = round(mean(WDIR),0),
+    WSPD = round(mean(WSPD),1),
+    GST = round(mean(GST),1),
+    WVHT = mean(WVHT),
+    DPD = mean(DPD),
+　　APD = mean(APD),
+    MWD = round(mean(MWD ),0),
+　　PRES = round(mean(PRES),0),
+　　ATMP = round(mean(ATMP),1),
+　　WTMP = round(mean(WTMP),1),
+　　DEWP = mean(DEWP),
+　　VIS = mean(VIS),
+　　TIDE = mean(TIDE)
+  )
+
+
+dt2015 <- mr2015 %>% 
+  group_by(YYYY, MM, DD) %>% 
+  summarise(
+    daily.record.time = n(),
+    WDIR = round(mean(WDIR),0),
+    WSPD = round(mean(WSPD),1),
+    GST = round(mean(GST),1),
+    WVHT = mean(WVHT),
+    DPD = mean(DPD),
+　　APD = mean(APD),
+    MWD = round(mean(MWD ),0),
+　　PRES = round(mean(PRES),0),
+　　ATMP = round(mean(ATMP),1),
+　　WTMP = round(mean(WTMP),1),
+　　DEWP = mean(DEWP),
+　　VIS = mean(VIS),
+　　TIDE = mean(TIDE)
+  )
+
+
+dt2016 <- mr2016 %>% 
+  group_by(YYYY, MM, DD) %>% 
+  summarise(
+    daily.record.time = n(),
+    WDIR = round(mean(WDIR),0),
+    WSPD = round(mean(WSPD),1),
+    GST = round(mean(GST),1),
+    WVHT = mean(WVHT),
+    DPD = mean(DPD),
+　　APD = mean(APD),
+    MWD = round(mean(MWD ),0),
+　　PRES = round(mean(PRES),0),
+　　ATMP = round(mean(ATMP),1),
+　　WTMP = round(mean(WTMP),1),
+　　DEWP = mean(DEWP),
+　　VIS = mean(VIS),
+　　TIDE = mean(TIDE)
+  )
+```
+
+
+```{r}
+buoy.data <- rbind(dt2012, dt2013,dt2014,dt2015,dt2016)
+write_csv(buoy.data, "buoydt.csv")
+```
+
+###To use the prepared data, just use code below
+
+```{r}
+buoy.data <- read_csv("buoydt.csv")
+```
+
+
