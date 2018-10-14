@@ -1,0 +1,65 @@
+---
+title: "RedSox2012_2017"
+author: "Sky Liu"
+date: "10/10/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+require(gdata)
+```
+## Load raw data
+
+```{r load_data include=FALSE}
+RedSox2017 = read.xls ("Redsox_HT_1009.xlsx", sheet = 1, header = TRUE)
+RedSox2016 = read.xls ("Redsox_HT_1009.xlsx", sheet = 2, header = TRUE)
+RedSox2015 = read.xls ("Redsox_HT_1009.xlsx", sheet = 3, header = TRUE)
+RedSox2014 = read.xls ("Redsox_HT_1009.xlsx", sheet = 4, header = TRUE)
+RedSox2013 = read.xls ("Redsox_HT_1009.xlsx", sheet = 5, header = TRUE)
+RedSox2012 = read.xls ("Redsox_HT_1009.xlsx", sheet = 6, header = TRUE)
+```
+
+## merge data
+
+
+```{r}
+year <- rep.int(2012, 162)
+year <- as.data.frame(year)
+RedSox2012 <- cbind(year,RedSox2012)
+year <- rep.int(2013, 162)
+year <- as.data.frame(year)
+RedSox2013 <- cbind(year,RedSox2013)
+year <- rep.int(2014, 162)
+year <- as.data.frame(year)
+RedSox2014 <- cbind(year,RedSox2014)
+year <- rep.int(2015, 162)
+year <- as.data.frame(year)
+RedSox2015 <- cbind(year,RedSox2015)
+year <- rep.int(2016, 162)
+year <- as.data.frame(year)
+RedSox2016 <- cbind(year,RedSox2016)
+year <- rep.int(2017, 162)
+year <- as.data.frame(year)
+RedSox2017 <- cbind(year,RedSox2017)
+RedSox2012_2017 <- rbind(RedSox2012,RedSox2013,RedSox2014,RedSox2015,RedSox2016,RedSox2017)
+```
+
+
+## Clean data
+
+filter the data 'year', 'date', 'X2'(host or guest), 'opponent', 'GB'(game behind), 'D/N' (Day/Night?), 'Attendance','Original schedule'
+
+```{r}
+RedSox2012_2017 <- select(RedSox2012_2017,year,Date,X2,Opp,GB,D.N,Attendance,Orig..Scheduled) %>% 
+  separate(Date,c("Day_of_Week","Date"),",") %>% 
+  separate(Date,c("A", "Month", "Date"),extra = "drop", fill = "right") 
+RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-A)
+RedSox2012_2017$Month<- match(RedSox2012_2017$Month, month.abb)
+RedSox2012_2017$Orig..Scheduled <- as.data.frame(RedSox2012_2017$Orig..Scheduled)%>% mutate_all(~ifelse(. == "", 0, .)) %>% mutate_all(~ifelse(. == "2", 1, .))
+
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
