@@ -70,11 +70,11 @@ Basket2012_2017 <- rbind(Basket2012,Basket2013,Basket2014,Basket2015,Basket2016,
 
 ## Clean data
 
-filter the data 'year', 'date', 'X2'(host or guest), 'opponent', 'GB'(game behind), 'D/N' (Day/Night?), 'Attendance','Original schedule'
+filter the data 'year', 'date', 'X2'(host or guest),  'D/N' (Day/Night?), 'Attendance','Original schedule'
 
 ```{r}
 #reformat the date as Day_of_Week, Month, DayofMonth
-RedSox2012_2017 <- select(RedSox2012_2017,year,Date,X2,Opp,GB,D.N,Attendance,Orig..Scheduled) %>% 
+RedSox2012_2017 <- select(RedSox2012_2017,year,Date,X2,D.N,Attendance,Orig..Scheduled) %>% 
   separate(Date,c("Day_of_Week","Date"),",") %>% 
   separate(Date,c("A", "Month", "DayofMonth"),extra = "drop", fill = "right") 
 RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-A)
@@ -106,7 +106,7 @@ Basket2012_2017$OPPONENT <-  str_replace(Basket2012_2017$OPPONENT,"vs", "")
 #Combine year/month/dayofmonth as one column
 Basket2012_2017 <- mutate(Basket2012_2017,Date = paste(YEAR, Month, DayofMonth, sep = "-"))
 Basket2012_2017 <- dplyr::select(Basket2012_2017,-c(YEAR,Month,DayofMonth))
-Basket2012_2017 <- Basket2012_2017 %>% select(Date, everything())
+Basket2012_2017 <- Basket2012_2017 %>% select(Date, Day_of_Week,ATTENDANCE)
 ```
 
 ```{r}
