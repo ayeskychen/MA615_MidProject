@@ -8,11 +8,12 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(stringr)
 require(gdata)
 ```
 ## Load raw data
 
-```{r load_data include=FALSE}
+```{r load_Redsox_data include=FALSE}
 RedSox2017 = read.xls ("Redsox_HT_1009.xlsx", sheet = 1, header = TRUE)
 RedSox2016 = read.xls ("Redsox_HT_1009.xlsx", sheet = 2, header = TRUE)
 RedSox2015 = read.xls ("Redsox_HT_1009.xlsx", sheet = 3, header = TRUE)
@@ -21,6 +22,18 @@ RedSox2013 = read.xls ("Redsox_HT_1009.xlsx", sheet = 5, header = TRUE)
 RedSox2012 = read.xls ("Redsox_HT_1009.xlsx", sheet = 6, header = TRUE)
 ```
 
+```{r load_Basketball_data include=FALSE}
+Basket2012 = read.xls ("BasketballData_1014.xlsx", sheet = 1, header = TRUE)
+Basket2013 = read.xls ("BasketballData_1014.xlsx", sheet = 2, header = TRUE)
+Basket2014 = read.xls ("BasketballData_1014.xlsx", sheet = 3, header = TRUE)
+Basket2015 = read.xls ("BasketballData_1014.xlsx", sheet = 4, header = TRUE)
+Basket2016 = read.xls ("BasketballData_1014.xlsx", sheet = 5, header = TRUE)
+Basket2017 = read.xls ("BasketballData_1014.xlsx", sheet = 6, header = TRUE)
+```
+
+```{r load_Bouy_data include=FALSE}
+buoy_data <- read_csv("buoydt.csv")
+```
 ## merge data
 
 
@@ -46,6 +59,9 @@ RedSox2017 <- cbind(year,RedSox2017)
 RedSox2012_2017 <- rbind(RedSox2012,RedSox2013,RedSox2014,RedSox2015,RedSox2016,RedSox2017)
 ```
 
+```{r}
+Basket2012_2017 <- rbind(Basket2012,Basket2013,Basket2014,Basket2015,Basket2016,Basket2017)
+```
 
 ## Clean data
 
@@ -54,12 +70,46 @@ filter the data 'year', 'date', 'X2'(host or guest), 'opponent', 'GB'(game behin
 ```{r}
 RedSox2012_2017 <- select(RedSox2012_2017,year,Date,X2,Opp,GB,D.N,Attendance,Orig..Scheduled) %>% 
   separate(Date,c("Day_of_Week","Date"),",") %>% 
-  separate(Date,c("A", "Month", "Date"),extra = "drop", fill = "right") 
+  separate(Date,c("A", "Month", "DayofMonth"),extra = "drop", fill = "right") 
 RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-A)
 RedSox2012_2017$Month<- match(RedSox2012_2017$Month, month.abb)
 RedSox2012_2017$Orig..Scheduled <- as.data.frame(RedSox2012_2017$Orig..Scheduled)%>% mutate_all(~ifelse(. == "", 0, .)) %>% mutate_all(~ifelse(. == "2", 1, .))
-
+OriSchedule <- RedSox2012_2017$Orig..Scheduled
+RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-Orig..Scheduled)
+RedSox2012_2017 <- cbind(RedSox2012_2017,OriSchedule )
+RedSox2012_2017 <- RedSox2012_2017 %>% mutate(Date = paste(year, Month, DayofMonth, sep = "-")) %>% select(Date, everything())
+RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-c(year,Month,DayofMonth))
+RedSox2012_2017 <- dplyr::filter(RedSox2012_2017,X2 != '@') 
+RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-c(X2))
+df <- df %>% 
 ```
 
+
+```{r}
+Basket2012_2017 <- separate(Basket2012_2017,DATE,c("Day_of_Week","Date"),",") %>% 
+  separate(Date,c("A", "Month", "DayofMonth"),extra = "drop", fill = "right") 
+Basket2012_2017 <- dplyr::select(Basket2012_2017,-A)
+Basket2012_2017$Month<- match(Basket2012_2017$Month, month.abb)
+Basket2012_2017$OPPONENT <-  str_replace(Basket2012_2017$OPPONENT,"vs", "")
+Basket2012_2017 <- mutate(Basket2012_2017,Date = paste(YEAR, Month, DayofMonth, sep = "-"))
+Basket2012_2017 <- dplyr::select(Basket2012_2017,-c(YEAR,Month,DayofMonth))
+Basket2012_2017 <- Basket2012_2017 %>% select(Date, everything())
+```
+
+```{r}
+buoy_data <- mutate(buoy_data,Date = paste(YYYY, MM, DD, sep = "-"))
+buoy_data <- buoy_data %>% select(Date, everything())
+buoy_data <- dplyr::select(buoy_data,-c(YYYY, MM, DD))
+```
+
+## Join Bouy and Basketball
+```{r}
+BouyBasket <- inner_join(buoy_data, Basket2012_2017, by = c("Date" = "Date"))
+```
+
+## Join Bouy and Redsox
+```{r}
+BouyRedsox <- inner_join(buoy_data, RedSox2012_2017, by = c("Date" = "Date"))
+```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
