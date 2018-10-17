@@ -70,33 +70,35 @@ Basket2012_2017 <- rbind(Basket2012,Basket2013,Basket2014,Basket2015,Basket2016,
 
 ## Clean data
 
-filter the data 'year', 'date', 'X2'(host or guest),  'D/N' (Day/Night?), 'Attendance','Original schedule'
+filter the data 'year', 'date', 'X2'(host or guest), ‘W.L.1’(win or lost record)， 'D/N' (Day/Night?), 'Attendance'
 
 ```{r}
 #reformat the date as Day_of_Week, Month, DayofMonth
-RedSox2012_2017 <- select(RedSox2012_2017,year,Date,X2,D.N,Attendance,Orig..Scheduled) %>% 
+RedSox2012_2017 <- select(RedSox2012_2017,year,Date,X2,W.L.1,D.N,Attendance) %>% 
   separate(Date,c("Day_of_Week","Date"),",") %>% 
   separate(Date,c("A", "Month", "DayofMonth"),extra = "drop", fill = "right") 
 RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-A)
 #reformat Month data from abbreviation to number
 RedSox2012_2017$Month<- match(RedSox2012_2017$Month, month.abb)
-#reformat orifinal schedued as factor 0 or 1
-RedSox2012_2017$Orig..Scheduled <- as.data.frame(RedSox2012_2017$Orig..Scheduled)%>% mutate_all(~ifelse(. == "", 0, .)) %>% mutate_all(~ifelse(. == "2", 1, .))
-OriSchedule <- RedSox2012_2017$Orig..Scheduled
-RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-Orig..Scheduled)
-RedSox2012_2017 <- cbind(RedSox2012_2017,OriSchedule )
-#Combine year/month/dayofmonth as one column
-RedSox2012_2017 <- RedSox2012_2017 %>% mutate(Date = paste(year, Month, DayofMonth, sep = "-")) %>% select(Date, everything())
-RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-c(year,Month,DayofMonth))
 #clean opponent information
 RedSox2012_2017 <- dplyr::filter(RedSox2012_2017,X2 != '@') 
 RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-c(X2))
+
+#Combine year/month/dayofmonth as one column
+RedSox2012_2017 <- RedSox2012_2017 %>% mutate(Date = paste(year, Month, DayofMonth, sep = "-")) %>% select(Date, everything())
+RedSox2012_2017 <- dplyr::select(RedSox2012_2017,-c(Month,DayofMonth))
+
+#reformat win/lost record
+colnames(RedSox2012_2017) <- c('Date','Year','Day_of_Week','WL','DN','Attendance')
+RedSox2012_2017 <- RedSox2012_2017 %>% separate(WL,c("Win","Lost"),"-") %>% mutate(GameBehind = as.numeric(Lost) - as.numeric(Win))
+
 ```
 
 
 ```{r}
 #reformat the date as Day_of_Week, Month, DayofMonth
-Basket2012_2017 <- separate(Basket2012_2017,DATE,c("Day_of_Week","Date"),",") %>% 
+Basket2012_2017 <- select(Basket2012_2017,YEAR,DATE,OPPONENT,W.L,ATTENDANCE) 
+Basket2012_2017 <-  separate(Basket2012_2017,DATE,c("Day_of_Week","Date"),",") %>% 
   separate(Date,c("A", "Month", "DayofMonth"),extra = "drop", fill = "right") 
 Basket2012_2017 <- dplyr::select(Basket2012_2017,-A)
 #reformat Month data from abbreviation to number
@@ -104,9 +106,11 @@ Basket2012_2017$Month<- match(Basket2012_2017$Month, month.abb)
 #clean opponent information
 Basket2012_2017$OPPONENT <-  str_replace(Basket2012_2017$OPPONENT,"vs", "")
 #Combine year/month/dayofmonth as one column
-Basket2012_2017 <- mutate(Basket2012_2017,Date = paste(YEAR, Month, DayofMonth, sep = "-"))
-Basket2012_2017 <- dplyr::select(Basket2012_2017,-c(YEAR,Month,DayofMonth))
-Basket2012_2017 <- Basket2012_2017 %>% select(Date, Day_of_Week,ATTENDANCE)
+Basket2012_2017 <- mutate(Basket2012_2017,Date = paste(YEAR, Month, DayofMonth, sep = "-"))%>% select(Date, everything())
+Basket2012_2017 <- dplyr::select(Basket2012_2017,-c(Month,DayofMonth))
+#reformat win/lost record
+colnames(Basket2012_2017) <- c('Date','Year','Day_of_Week','Opponent','WL','Attendance')
+Basket2012_2017 <- Basket2012_2017 %>% separate(WL,c("Win","Lost"),"-") %>% mutate(GameBehind = as.numeric(Lost) - as.numeric(Win))
 ```
 
 ```{r}
