@@ -37,6 +37,13 @@ Basket2017 = read.xls ("BasketballData_1014.xlsx", sheet = 6, header = TRUE)
 #load buoy weather data from 2012 to 2017
 buoy_data <- read_csv("buoydt.csv")
 ```
+
+```{r load_Weather include=FALSE}
+#load weather data from 
+Weather <- read_csv("Weather.csv")
+```
+
+
 ## merge data
 
 
@@ -117,26 +124,39 @@ Basket2012_2017 <- Basket2012_2017 %>% separate(WL,c("Win","Lost"),"-") %>% muta
 #Combine year/month/dayofmonth as one column
 buoy_data <- mutate(buoy_data,Date = paste(YYYY, MM, DD, sep = "-"))
 buoy_data <- buoy_data %>% select(Date, everything())
-buoy_data <- dplyr::select(buoy_data,-c(YYYY, MM, DD))
+buoy_data <- dplyr::select(buoy_data,-c(daily.record.time,YYYY, MM, DD))
 ```
 
-## Join Buoy and Basketball
 ```{r}
+Weather <- Weather %>% select(DATE, PRCP,SNOW,TMAX,TMIN) %>% mutate(DATE = str_replace(DATE, "/", "-"))
+colnames(Weather) <- c('Date','PRCP','Snow','Tmax','Tmin')
+Weather <- Weather %>% mutate(Date = str_replace(Date, "/", "-"))
+Weather$Date
+```
+
+
+```{r}
+# Join Buoy and Basketball
 BuoyBasket <- inner_join(buoy_data, Basket2012_2017, by = c("Date" = "Date"))
-write_csv(BuoyBasket, "BuoyBasket.csv")
+## Join BuoyBasket and Weather
+CelticsWeather <- inner_join(Weather, BuoyBasket, by = c("Date" = "Date"))
+write_csv(CelticsWeather, "CelticsWeather.csv")
 ```
 
-## Join Buoy and Redsox
+
 ```{r}
+# Join Buoy and Redsox
 BuoyRedsox <- inner_join(buoy_data, RedSox2012_2017, by = c("Date" = "Date"))
-write_csv(BuoyRedsox, "BuoyRedsox.csv")
+# Join BuoyRedsox and Weather
+RedSoxWeather <- inner_join(Weather, BuoyRedsox, by = c("Date" = "Date"))
+write_csv(RedSoxWeather, "RedSoxWeather.csv")
 ```
 
 
 ###To use the prepared data, just use code below
 
 ```{r}
-BuoyRedsox <- read_csv("BuoyRedsox.csv")
-BuoyBasket <- read_csv("BuoyBasket.csv")
+RedSoxWeather <- read_csv("CelticsWeather.csv")
+CelticsWeather <- read_csv("CelticsWeather.csv")
 ```
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
