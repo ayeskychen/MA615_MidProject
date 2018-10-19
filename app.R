@@ -23,6 +23,8 @@ library(markdown)
 RedSox <- read_csv("RedSoxWeather.csv")
 Celtics <- read_csv("CelticsWeather.csv")
 
+# RedSox$Date <- as.Date(RedSox$Date)
+# Celtics$Date <- as.Date(Celtics$Date)
 
 
 #plotting theme for ggplot2
@@ -63,6 +65,7 @@ ui<-(pageWithSidebar(
     checkboxInput("show.points", "show points", FALSE),
     checkboxInput("show.line", "show line", FALSE),
     
+    
     tags$hr(),
     
     h4("A Work by:"),
@@ -95,15 +98,17 @@ server<-(function(input, output, session){
     if(!exists(input$dataset)) return() #make sure upload exists
     var.opts<-colnames(get(input$dataset))
     updateSelectInput(session, "attendance", choices = var.opts[24])
-    updateSelectInput(session, "variable", choices = var.opts)
+    updateSelectInput(session, "variable", choices = var.opts[c(2:23,25)])
   })
   
-  output$caption<-renderText({
-    switch(input$plot.type,
-           "boxplot" 	= 	"Boxplot",
-           "scatterplot" =	"Scatterplot")
-  })
-  
+
+ output$caption<-renderText({
+      switch(input$plot.type,
+             "boxplot" 	= 	"Boxplot",
+             "scatterplot" =	"Scatterplot")
+    })
+ 
+    
   
   output$plot <- renderUI({
     plotOutput("p")
@@ -139,22 +144,23 @@ server<-(function(input, output, session){
   #plotting function using ggplot2
   output$p <- renderPlot({
     
-    plot.obj<-get_data()
+    plot.obj <- get_data()
     
     #conditions for plotting
-    if(is.null(plot.obj)) return()
+    if(is.null(plot.obj))
+      return()
     
     #make sure attendance and variable have loaded
     if(plot.obj$attendance == "" | plot.obj$variable =="") return()
     
     #plot types
-    plot.type<-switch(input$plot.type,
-                      "boxplot" 	= geom_boxplot(),
-                      "scatterplot" =	geom_point(color='black',alpha=0.5, position = 'jitter')
+    plot.type <- switch(input$plot.type,
+                        "boxplot" 	= geom_boxplot(),
+                        "scatterplot" =	geom_point(color='black',alpha=0.5, position = 'jitter')
     )
     
     
-    if(input$plot.type=="boxplot")	{		
+    if(input$plot.type == "boxplot")	{		
       p<-ggplot(plot.obj$data,
                 aes_string(
                   x 		= plot.obj$variable,
@@ -163,36 +169,37 @@ server<-(function(input, output, session){
                 )
       ) + plot.type
       
-      if(input$show.points==TRUE)
+      if(input$show.points == TRUE)
       {
         p<-p+ geom_point(color='black',alpha=0.5, position = 'jitter')
       }
       
     } else { #selected scatterplot
-      
-      p<-ggplot(plot.obj$data,
-                aes_string(
-                  x 		= plot.obj$variable,
+     
+      p <- ggplot(plot.obj$data,
+                  aes_string(
+                  x 	= plot.obj$variable,
                   y 	= plot.obj$attendance,
                   fill 	= plot.obj$variable
                   #color 	= as.factor(plot.obj$variable)
                 )
       )  + plot.type
-      
+
       input$show.points==FALSE
-      
+
       if(input$show.line==TRUE)
       {
-        p<-p+geom_line() + geom_smooth() 
+        p<-p+geom_line()  + geom_smooth()
       }
+      
     }
     
     p<-p+labs(
       fill 	= input$variable,
       x 		= "",
       y 		= input$attendance
-    )  +
-      .theme
+    ) #  +
+      # ylim( 0, ifelse( plot.obj == RedSox, 40000, 20000) )
     print(p)
   })
   
