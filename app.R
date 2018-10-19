@@ -25,7 +25,8 @@ Celtics <- read_csv("CelticsWeather.csv")
 
 RedSox$Year <- as.factor(RedSox$Year)
 Celtics$Year <- as.factor(Celtics$Year)
-
+RedSox <- RedSox %>% group_by(ATMP) %>% arrange(ATMP) %>% filter(ATMP<=104)
+Celtics <- Celtics %>% group_by(ATMP) %>% arrange(ATMP) %>% filter(ATMP<=70)
 
 #plotting theme for ggplot2
 .theme<- theme(
