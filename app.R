@@ -23,8 +23,8 @@ library(markdown)
 RedSox <- read_csv("RedSoxWeather.csv")
 Celtics <- read_csv("CelticsWeather.csv")
 
-# RedSox$Date <- as.Date(RedSox$Date)
-# Celtics$Date <- as.Date(Celtics$Date)
+RedSox$Year <- as.factor(RedSox$Year)
+Celtics$Year <- as.factor(Celtics$Year)
 
 
 #plotting theme for ggplot2
@@ -60,7 +60,7 @@ ui<-(pageWithSidebar(
     selectInput("attendance","Attendance:", choices = NULL),
     selectInput("variable","Variable:", choices = NULL),
     selectInput("plot.type","Plot Type:",
-                list(boxplot = "boxplot", scatterplot = "scatterplot")
+                list(scatterplot = "scatterplot",boxplot = "boxplot" )
     ),
     checkboxInput("show.points", "show points", FALSE),
     checkboxInput("show.line", "show line", FALSE),
@@ -84,6 +84,7 @@ ui<-(pageWithSidebar(
     h3(textOutput("caption")),
     #h3(htmlOutput("caption")),
     uiOutput("plot") # depends on input
+    #fluidRow(splitLayout(cellWidths = c("50%", "50%"), plotOutput("BarPlot1"), plotOutput("BarPlot2"))
   )
 ))
 
@@ -93,12 +94,13 @@ server<-(function(input, output, session){
   
   #update variable and
   #attendance based on the data
+
   observe({
     #browser()
     if(!exists(input$dataset)) return() #make sure upload exists
     var.opts<-colnames(get(input$dataset))
     updateSelectInput(session, "attendance", choices = var.opts[24])
-    updateSelectInput(session, "variable", choices = var.opts[c(2:23,25)])
+    updateSelectInput(session, "variable", choices = var.opts[c(2,7,14,19,20,23)])
   })
   
 
@@ -114,6 +116,7 @@ server<-(function(input, output, session){
     plotOutput("p")
   })
   
+
   #get data object
   get_data<-reactive({
     
@@ -165,6 +168,7 @@ server<-(function(input, output, session){
                 aes_string(
                   x 		= plot.obj$variable,
                   y 		= plot.obj$attendance,
+                  #color = plot.obj$DN,
                   fill 	= plot.obj$variable # let type determine plotting
                 )
       ) + plot.type
@@ -189,7 +193,7 @@ server<-(function(input, output, session){
 
       if(input$show.line==TRUE)
       {
-        p<-p+geom_line()  + geom_smooth()
+        p<-p+ geom_smooth( se = FALSE)
       }
       
     }
