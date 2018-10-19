@@ -4,7 +4,7 @@ View(celtics_weather)
 redsox_weather <- read_csv("redsox_weather.csv")
 View(redsox_weather)
 ############################################################################################################
-
+ggplot(data = celtics_weather) +aes(x = ATMP) +geom_histogram(bins = 30, fill = "#0c4c8a") +theme_minimal()
 library(tidyverse)
 ### Celtics attendance
 ## Since there are extreme high temperatures in the dataset, I would exclude the rows with temperature higher than 70F
@@ -30,10 +30,11 @@ ggplot(data = cwcel) +aes(x = ATMP, y = ATTENDANCE, color = indicator) +geom_poi
 ggplot(data = buoycel_norm) +aes(x = WSPD, y = ATTENDANCE) +geom_point(color = "#0c4c8a") +theme_minimal()
 
 #############################################################################################################
+ggplot(data = redsox_weather) +aes(x = ATMP) +geom_histogram(bins = 30, fill = "#0c4c8a") +theme_minimal()
 
 ### RedSox attendance
 ## Since there are extreme high temperatures in the dataset, I would exclude the rows with temperature higher than 70F
-buoyrs_norm <- redsox_weather %>% group_by(ATMP) %>% arrange(ATMP) %>% filter(ATMP<=70)
+buoyrs_norm <- redsox_weather %>% group_by(ATMP) %>% arrange(ATMP) %>% filter(ATMP<=104)
 ## Distribution of temperature
 ggplot(data = buoyrs_norm) +aes(x = ATMP) +geom_histogram(bins = 30, fill = "#0c4c8a") +theme_minimal()
 ## Overall attndence by temperature
