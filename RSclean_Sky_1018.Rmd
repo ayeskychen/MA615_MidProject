@@ -135,11 +135,14 @@ Weather$Date
 ```
 
 
+
 ```{r}
 # Join Buoy and Basketball
 BuoyBasket <- inner_join(buoy_data, Basket2012_2017, by = c("Date" = "Date"))
 ## Join BuoyBasket and Weather
 CelticsWeather <- inner_join(Weather, BuoyBasket, by = c("Date" = "Date"))
+#delete outliers of ATMP
+CelticsWeather <- CelticsWeather %>% group_by(ATMP) %>% arrange(ATMP) %>% filter(ATMP<=70)
 write_csv(CelticsWeather, "CelticsWeather.csv")
 ```
 
@@ -149,6 +152,8 @@ write_csv(CelticsWeather, "CelticsWeather.csv")
 BuoyRedsox <- inner_join(buoy_data, RedSox2012_2017, by = c("Date" = "Date"))
 # Join BuoyRedsox and Weather
 RedSoxWeather <- inner_join(Weather, BuoyRedsox, by = c("Date" = "Date"))
+#delete outliers of ATMP
+RedSoxWeather <- RedSoxWeather %>% group_by(ATMP) %>% arrange(ATMP) %>% filter(ATMP<=104)
 write_csv(RedSoxWeather, "RedSoxWeather.csv")
 ```
 
