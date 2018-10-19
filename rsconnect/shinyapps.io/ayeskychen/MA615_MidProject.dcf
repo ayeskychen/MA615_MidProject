@@ -1,0 +1,13 @@
+name: MA615_MidProject
+title: MA615_MidProject
+username:
+account: ayeskychen
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 525156
+bundleId: 1651842
+url: https://ayeskychen.shinyapps.io/MA615_MidProject/
+when: 1539971601.89052
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: 615 Midterm Report.Rmd|BasketballData_1014.xlsx|BuoyBasket.csv|BuoyRedsox.csv|Buoy_data_readme.md|RSclean_Sky_1018.Rmd|Redsox_HT_1009.xlsx|Tingrui_EDA.R|buoy2012-2017.Rmd|buoydt.csv|mr2012.csv|mr2013.csv|mr2014.csv|mr2015.csv|mr2016.csv|weather.csv|weather_documentation.pdf|615_Midterm_Report_files

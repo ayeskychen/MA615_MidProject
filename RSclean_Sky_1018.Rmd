@@ -77,7 +77,7 @@ Basket2012_2017 <- rbind(Basket2012,Basket2013,Basket2014,Basket2015,Basket2016,
 
 ## Clean data
 
-filter the data 'year', 'date', 'X2'(host or guest), ‘W.L.1’(win or lost record)， 'D/N' (Day/Night?), 'Attendance'
+filter the data 'year', 'date', 'X2'(host or guest), ???W.L.1???(win or lost record)??? 'D/N' (Day/Night?), 'Attendance'
 
 ```{r}
 #reformat the date as Day_of_Week, Month, DayofMonth
@@ -131,7 +131,6 @@ buoy_data <- dplyr::select(buoy_data,-c(daily.record.time,YYYY, MM, DD))
 Weather <- Weather %>% select(DATE, PRCP,SNOW,TMAX,TMIN) %>% mutate(DATE = str_replace(DATE, "/", "-"))
 colnames(Weather) <- c('Date','PRCP','Snow','Tmax','Tmin')
 Weather <- Weather %>% mutate(Date = str_replace(Date, "/", "-"))
-Weather$Date
 ```
 
 
@@ -161,7 +160,7 @@ write_csv(RedSoxWeather, "RedSoxWeather.csv")
 ###To use the prepared data, just use code below
 
 ```{r}
-RedSoxWeather <- read_csv("CelticsWeather.csv")
+RedSoxWeather <- read_csv("RedSoxWeather")
 CelticsWeather <- read_csv("CelticsWeather.csv")
 ```
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

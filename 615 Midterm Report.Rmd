@@ -23,10 +23,10 @@ Lots of research has been done on weather condition as a critical influence to s
 This report has been done in four parts. First, we will talk about what are our data sources and what we have done to get the data ready to analyze. Second, we conduct EDA on multiple weather conditions and attendance and try to find out the potential relation. Third, we will discuss our outcomes and findings. In the end, we will introduce our interactive data visualization which allows users to play with the data by themselves.
 
 ##Data Collection and Preparation
-The weather data was sourced from National Data Buoy Center. Since we are not sure about which variables we will use, we simply keep all the variables in the datasets. The air temperature is tested multiples times everyday, thus we took the average of them and assigned each day only one temperature record. Meanwhile, we found the year, month and date were stored in three separate columns, therefore we combined those three columns, formatted them as “date”, and put them in a new column.
-The attendance data of Red Sox games were sourced from Baseball-Reference. Totally six datasets were downloaded directly from the website. The six datasets contain the date, day of week, game result, opponent, team rank, team’s overall records in current season and attendance from season 2012 to season 2017. Since we are going to explore the relationship between attendance and weather, we removed some of the unrelated variables such as team rank and overall records. After looked at the dataset in R, we found some format issues then we reformatted most of the variables to proper data type so that R could read them without any issue. 
+The weather data was sourced from National Data Buoy Center. Since we are not sure about which variables we will use, we simply keep all the variables in the datasets. The air temperature is tested multiples times everyday, thus we took the average of them and assigned each day only one temperature record. Meanwhile, we found the year, month and date were stored in three separate columns, therefore we combined those three columns, formatted them as ???date???, and put them in a new column.
+The attendance data of Red Sox games were sourced from Baseball-Reference. Totally six datasets were downloaded directly from the website. The six datasets contain the date, day of week, game result, opponent, team rank, team???s overall records in current season and attendance from season 2012 to season 2017. Since we are going to explore the relationship between attendance and weather, we removed some of the unrelated variables such as team rank and overall records. After looked at the dataset in R, we found some format issues then we reformatted most of the variables to proper data type so that R could read them without any issue. 
 The attendance data of Celtics games were sourced from ESPN. We conducted similar data cleaning works for these datasets, for example, we removed some unrelated variables, merged datasets into one table and formatted variables into proper data type. 
-As we have all three datasets ready, we merged weather data with each of the Red Sox and Celtics dataset. We didn’t merge all three into one dataset because the dates of games for each sport are different, and if we merged them together there would be lots of NAs in the dataset.
+As we have all three datasets ready, we merged weather data with each of the Red Sox and Celtics dataset. We didn???t merge all three into one dataset because the dates of games for each sport are different, and if we merged them together there would be lots of NAs in the dataset.
 
 
 ```{r global_options, echo=FALSE, message=FALSE, warning=FALSE}
@@ -45,7 +45,7 @@ ggplot(data = redsox_weather) +aes(x = ATMP) +geom_histogram(bins = 30, fill = "
 ```
 
 
-As shown in the above graph, we found some abnormal records of air temperature. First, there are couple records indicate the air temperature is over 104°F, we consider these as abnormal temperature since there is not such high temperature has ever happened in Boston (the record high temperature in Boston is 104°F, recorded July 4, 1911). We also found lots of temperature records were at 70°F to 104°F. Since most of the Celtics games are in Fall/Winter and early Spring, we thought these records could not represent the actual temperature in Boston area during those game days. We found the average temperature in Boston in October is 62°F/47°F, and average temperature in April is 56°F/41°F. Therefore, we set the threshold at 70°F, hence we remove the records that has temperature higher than that.
+As shown in the above graph, we found some abnormal records of air temperature. First, there are couple records indicate the air temperature is over 104??F, we consider these as abnormal temperature since there is not such high temperature has ever happened in Boston (the record high temperature in Boston is 104??F, recorded July 4, 1911). We also found lots of temperature records were at 70??F to 104??F. Since most of the Celtics games are in Fall/Winter and early Spring, we thought these records could not represent the actual temperature in Boston area during those game days. We found the average temperature in Boston in October is 62??F/47??F, and average temperature in April is 56??F/41??F. Therefore, we set the threshold at 70??F, hence we remove the records that has temperature higher than that.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ## Since there are extreme high temperatures in the dataset, I would exclude the rows with temperature higher than 70F
@@ -59,7 +59,7 @@ ggplot(data = buoyrs_norm) +aes(x = ATMP) +geom_histogram(bins = 30, fill = "#0c
 
 ```
 
-As we explored the temperature distribution of Red Sox games, we found extremely high temperature of 999°F on June 16, 2016, 675.7°F on July 25, 2016 and so on. Since the record high temperature on the earth is 134.1°F, we seriously consider these records invalid. As we stated before, the record high temperature in Boston is 104°F, we set our threshold here, and we removed the records higher than that.
+As we explored the temperature distribution of Red Sox games, we found extremely high temperature of 999??F on June 16, 2016, 675.7??F on July 25, 2016 and so on. Since the record high temperature on the earth is 134.1??F, we seriously consider these records invalid. As we stated before, the record high temperature in Boston is 104??F, we set our threshold here, and we removed the records higher than that.
 
 #Red Sox Attendance
 Creating a histogram of RedSox attendance, we can see that most games have pretty high attendance. Baseball is interesting because they sell "standing room only" tickets that can lead to attendance being higher than actual seats in the stadium. We can see this effect of especially popular games on the right tail of our histogram. 
@@ -91,7 +91,7 @@ ggplot(data = redsox_weather)+
 
 
 
-We decided to plot the attendance for warmest days and coldest days to investigate further. Again, the relationship between attendance and temperature is still not significant. But we could tell some potential trends from the this chart. Below 30°F, the attendance has a pretty obvious decrease. However, for the warm day games, there is no obvious relation between attendance and temperature.
+We decided to plot the attendance for warmest days and coldest days to investigate further. Again, the relationship between attendance and temperature is still not significant. But we could tell some potential trends from the this chart. Below 30??F, the attendance has a pretty obvious decrease. However, for the warm day games, there is no obvious relation between attendance and temperature.
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ## Since there are extreme high temperatures in the dataset, I would exclude the rows with temperature higher than 70F
 buoyrs_norm <- redsox_weather %>% group_by(ATMP) %>% arrange(ATMP) %>% filter(ATMP<=104)
@@ -106,13 +106,13 @@ cwrs <- rbind(cold10_rs2,warm10_rs2)
 ggplot(data = cwrs) +aes(x = ATMP, y = Attendance, color = indicator) +geom_point() +theme_minimal()
 ```
 
-We also consider the level of wind speed could affect the attendance of Red Sox games, since baseball is outdoor and if there is strong wind, players’ performance may be affected and the quality of the game may be different as well. Thus, we assume less people will go to the game during windy days.
+We also consider the level of wind speed could affect the attendance of Red Sox games, since baseball is outdoor and if there is strong wind, players??? performance may be affected and the quality of the game may be different as well. Thus, we assume less people will go to the game during windy days.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(data = buoycel_norm) +aes(x = WSPD, y = Attendance) +geom_point(color = "#0c4c8a") +theme_minimal()
 ```
 
-From the above graph, we can not tell the relation between attendance and wind speed. Even when the wind is really strong, the attendance is still very high. Since basketball is an indoor sports, therefore we didn’t assume wind speed will affect attendance.
+From the above graph, we can not tell the relation between attendance and wind speed. Even when the wind is really strong, the attendance is still very high. Since basketball is an indoor sports, therefore we didn???t assume wind speed will affect attendance.
 
 
 
