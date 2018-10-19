@@ -193,7 +193,7 @@ server<-(function(input, output, session){
 
       if(input$show.line==TRUE)
       {
-        p<-p+ geom_smooth( se = FALSE)
+        p<-p+ geom_smooth(method = lm  ,se = FALSE)
       }
       
     }
