@@ -2,7 +2,7 @@
 title: "615 Midterm Project Report"
 author: "Dave Anderson, Sky Liu,Tingtui Huang,Xiang Xu "
 date: "October 19, 2018"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -16,6 +16,7 @@ library(stringr)
 require(gdata)
 library(tuneR)
 library(markdown)
+
 ```
 
 ##Introduction
@@ -45,7 +46,7 @@ ggplot(data = redsox_weather) +aes(x = ATMP) +geom_histogram(bins = 30, fill = "
 ```
 
 
-As shown in the above graph, we found some abnormal records of air temperature. First, there are couple records indicate the air temperature is over 104??F, we consider these as abnormal temperature since there is not such high temperature has ever happened in Boston (the record high temperature in Boston is 104??F, recorded July 4, 1911). We also found lots of temperature records were at 70??F to 104??F. Since most of the Celtics games are in Fall/Winter and early Spring, we thought these records could not represent the actual temperature in Boston area during those game days. We found the average temperature in Boston in October is 62??F/47??F, and average temperature in April is 56??F/41??F. Therefore, we set the threshold at 70??F, hence we remove the records that has temperature higher than that.
+As shown in the above graph, we found some abnormal records of air temperature. First, there are couple records indicate the air temperature is over 104\textdegree F, we consider these as abnormal temperature since there is not such high temperature has ever happened in Boston (the record high temperature in Boston is 104\textdegree F, recorded July 4, 1911). We also found lots of temperature records were at 70\textdegree F to 104\textdegree F. Since most of the Celtics games are in Fall/Winter and early Spring, we thought these records could not represent the actual temperature in Boston area during those game days. We found the average temperature in Boston in October is 62\textdegree F/47\textdegree F, and average temperature in April is 56\textdegree F/41\textdegree F. Therefore, we set the threshold at 70\textdegree F, hence we remove the records that has temperature higher than that.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ## Since there are extreme high temperatures in the dataset, I would exclude the rows with temperature higher than 70F
@@ -59,7 +60,7 @@ ggplot(data = buoyrs_norm) +aes(x = ATMP) +geom_histogram(bins = 30, fill = "#0c
 
 ```
 
-As we explored the temperature distribution of Red Sox games, we found extremely high temperature of 999??F on June 16, 2016, 675.7??F on July 25, 2016 and so on. Since the record high temperature on the earth is 134.1??F, we seriously consider these records invalid. As we stated before, the record high temperature in Boston is 104??F, we set our threshold here, and we removed the records higher than that.
+As we explored the temperature distribution of Red Sox games, we found extremely high temperature of 999\textdegree F on June 16, 2016, 675.7\textdegree F on July 25, 2016 and so on. Since the record high temperature on the earth is 134.1\textdegree F, we seriously consider these records invalid. As we stated before, the record high temperature in Boston is 104\textdegree F, we set our threshold here, and we removed the records higher than that.
 
 #Red Sox Attendance
 Creating a histogram of RedSox attendance, we can see that most games have pretty high attendance. Baseball is interesting because they sell "standing room only" tickets that can lead to attendance being higher than actual seats in the stadium. We can see this effect of especially popular games on the right tail of our histogram. 
@@ -91,7 +92,7 @@ ggplot(data = redsox_weather)+
 
 
 
-We decided to plot the attendance for warmest days and coldest days to investigate further. Again, the relationship between attendance and temperature is still not significant. But we could tell some potential trends from the this chart. Below 30??F, the attendance has a pretty obvious decrease. However, for the warm day games, there is no obvious relation between attendance and temperature.
+We decided to plot the attendance for warmest days and coldest days to investigate further. Again, the relationship between attendance and temperature is still not significant. But we could tell some potential trends from the this chart. Below 30\textdegree F, the attendance has a pretty obvious decrease. However, for the warm day games, there is no obvious relation between attendance and temperature.
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ## Since there are extreme high temperatures in the dataset, I would exclude the rows with temperature higher than 70F
 buoyrs_norm <- redsox_weather %>% group_by(ATMP) %>% arrange(ATMP) %>% filter(ATMP<=104)
