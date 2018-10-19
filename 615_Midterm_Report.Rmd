@@ -37,16 +37,23 @@ redsox_weather <- read_csv("RedSoxWeather.csv")
 celtics_weather <- celtics_weather %>%  separate(Date, c("Year","Month","Day"))
 redsox_weather <- redsox_weather %>%  separate(Date, c("Year","Month","Day"))
 ```
+
 ##Exploratory Data Analysis
 #Overview
+
 To make sure there is no abnormal data lies in the dataset, we first made graph to see the distribution of air temperature.
+
 ```{r}
 ggplot(data = celtics_weather) +aes(x = ATMP) +geom_histogram(bins = 30, fill = "#0c4c8a") +theme_minimal()+ ggtitle("Celtics Temperatures")
 ggplot(data = redsox_weather) +aes(x = ATMP) +geom_histogram(bins = 30, fill = "#0c4c8a") +theme_minimal()+ ggtitle("Red Sox Temperatures")
 ```
 
 
+<<<<<<< HEAD:615_Midterm_Report.Rmd
 As shown in the above graph, we found some abnormal records of air temperature. First, there are couple records indicate the air temperature is over 104\textdegree F, we consider these as abnormal temperature since there is not such high temperature has ever happened in Boston (the record high temperature in Boston is 104\textdegree F, recorded July 4, 1911). We also found lots of temperature records were at 70\textdegree F to 104\textdegree F. Since most of the Celtics games are in Fall/Winter and early Spring, we thought these records could not represent the actual temperature in Boston area during those game days. We found the average temperature in Boston in October is 62\textdegree F/47\textdegree F, and average temperature in April is 56\textdegree F/41\textdegree F. Therefore, we set the threshold at 70\textdegree F, hence we remove the records that has temperature higher than that.
+=======
+As shown in the above graph, we found some abnormal records of air temperature. First, there are couple records indicate the air temperature is over $104 ^{\circ}F$, we consider these as abnormal temperature since there is not such high temperature has ever happened in Boston (the record high temperature in Boston is $104 ^{\circ}F$, recorded July 4, 1911). We also found lots of temperature records were at $70 ^{\circ}F$ to $104 ^{\circ}F$. Since most of the Celtics games are in Fall/Winter and early Spring, we thought these records could not represent the actual temperature in Boston area during those game days. We found the average temperature in Boston in October is $62 ^{\circ}F$/$47 ^{\circ}F$, and average temperature in April is $56 ^{\circ}F$/$41 ^{\circ}F$. Therefore, we set the threshold at $70 ^{\circ}F$, hence we remove the records that has temperature higher than that.
+>>>>>>> dbf6b5b3f5187ea8fbe8dd955fe1ee39cdc867da:615 Midterm Report.Rmd
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ## Since there are extreme high temperatures in the dataset, I would exclude the rows with temperature higher than 70F
@@ -60,7 +67,11 @@ ggplot(data = buoyrs_norm) +aes(x = ATMP) +geom_histogram(bins = 30, fill = "#0c
 
 ```
 
+<<<<<<< HEAD:615_Midterm_Report.Rmd
 As we explored the temperature distribution of Red Sox games, we found extremely high temperature of 999\textdegree F on June 16, 2016, 675.7\textdegree F on July 25, 2016 and so on. Since the record high temperature on the earth is 134.1\textdegree F, we seriously consider these records invalid. As we stated before, the record high temperature in Boston is 104\textdegree F, we set our threshold here, and we removed the records higher than that.
+=======
+As we explored the temperature distribution of Red Sox games, we found extremely high temperature of $999 ^{\circ}F$ on June 16, 2016, $675.7 ^{\circ}F$ on July 25, 2016 and so on. Since the record high temperature on the earth is $134.1 ^{\circ}F$, we seriously consider these records invalid. As we stated before, the record high temperature in Boston is $104 ^{\circ}F$, we set our threshold here, and we removed the records higher than that.
+>>>>>>> dbf6b5b3f5187ea8fbe8dd955fe1ee39cdc867da:615 Midterm Report.Rmd
 
 #Red Sox Attendance
 Creating a histogram of RedSox attendance, we can see that most games have pretty high attendance. Baseball is interesting because they sell "standing room only" tickets that can lead to attendance being higher than actual seats in the stadium. We can see this effect of especially popular games on the right tail of our histogram. 
@@ -92,7 +103,11 @@ ggplot(data = redsox_weather)+
 
 
 
+<<<<<<< HEAD:615_Midterm_Report.Rmd
 We decided to plot the attendance for warmest days and coldest days to investigate further. Again, the relationship between attendance and temperature is still not significant. But we could tell some potential trends from the this chart. Below 30\textdegree F, the attendance has a pretty obvious decrease. However, for the warm day games, there is no obvious relation between attendance and temperature.
+=======
+We decided to plot the attendance for warmest days and coldest days to investigate further. Again, the relationship between attendance and temperature is still not significant. But we could tell some potential trends from the this chart. Below $30 ^{\circ}F$, the attendance has a pretty obvious decrease. However, for the warm day games, there is no obvious relation between attendance and temperature.
+>>>>>>> dbf6b5b3f5187ea8fbe8dd955fe1ee39cdc867da:615 Midterm Report.Rmd
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ## Since there are extreme high temperatures in the dataset, I would exclude the rows with temperature higher than 70F
 buoyrs_norm <- redsox_weather %>% group_by(ATMP) %>% arrange(ATMP) %>% filter(ATMP<=104)
@@ -133,6 +148,7 @@ ggplot(data = celtics_weather, mapping = aes(x = Snow, y = Attendance))+
 ```
 
 Temperatures also seem to have little to no effect on attendance, but by plotting the color of each point according to season, we can see that the success of the team does. The low attendance points are almost all from seasons where the Celtics struggled. 
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 celtics_weather$Year <- as.numeric(celtics_weather$Year)
@@ -154,7 +170,8 @@ ggplot()+
 ```
 
 
-Again, we looked at the coldest and warmest days to further investigate effect of temperatures. Again, no real significance. 
+Again, we looked at the coldest and warmest days to further investigate effect of temperatures. Again, no real significance.
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ## Attendance for the coldest 20 days
 cold10_cel <- buoycel_norm[1:20,]
