@@ -2,7 +2,7 @@
 title: "615 Midterm Project Report"
 author: "Dave Anderson, Sky Liu,Tingtui Huang,Xiang Xu "
 date: "October 19, 2018"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -132,6 +132,7 @@ ggplot(data = celtics_weather, mapping = aes(x = Snow, y = Attendance))+
 ```
 
 Temperatures also seem to have little to no effect on attendance, but by plotting the color of each point according to season, we can see that the success of the team does. The low attendance points are almost all from seasons where the Celtics struggled. 
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 celtics_weather$Year <- as.numeric(celtics_weather$Year)
@@ -153,7 +154,8 @@ ggplot()+
 ```
 
 
-Again, we looked at the coldest and warmest days to further investigate effect of temperatures. Again, no real significance. 
+Again, we looked at the coldest and warmest days to further investigate effect of temperatures. Again, no real significance.
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ## Attendance for the coldest 20 days
 cold10_cel <- buoycel_norm[1:20,]
