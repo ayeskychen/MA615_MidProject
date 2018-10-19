@@ -86,7 +86,8 @@ ui<-(pageWithSidebar(
     #h3(htmlOutput("caption")),
     uiOutput("plot"), # depends on input,
     #fluidRow(splitLayout(cellWidths = c("50%", "50%"), plotOutput("BarPlot1"), plotOutput("BarPlot2"))
-    textOutput("text")
+    textOutput("text1"),
+    textOutput("text2")
   )
 ))
 
@@ -118,11 +119,14 @@ server<-(function(input, output, session){
     plotOutput("p")
   })
   
-  output$text <- renderText({
-    paste0("For variable ATMP, PRCP, WSPD, use scatterplot;", 
-           "\n", 
-           "for variable DN, Day_of_week, Year, use boxplot.")
+  output$text1 <- renderText({
+    text <- c("* For variable ATMP, PRCP, WSPD, use scatterplot;"        )
   })
+
+  output$text2 <- renderText({
+    text <- c("* For variable DN, Day_of_week, Year, use boxplot.")
+  })  
+  
   
 
   #get data object
